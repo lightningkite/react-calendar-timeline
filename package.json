@@ -2,7 +2,7 @@
   "name": "react-calendar-timeline",
   "version": "0.19.0",
   "description": "react calendar timeline",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "npm run build:lib",
     "build:demo": "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
