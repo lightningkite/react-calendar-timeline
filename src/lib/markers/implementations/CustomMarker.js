@@ -15,7 +15,7 @@ class CustomMarker extends React.Component {
   static propTypes = {
     getLeftOffsetFromDate: PropTypes.func.isRequired,
     renderer: PropTypes.func,
-    date: PropTypes.number.isRequired
+    date: PropTypes.oneOfType([PropTypes.number, PropTypes.object]).isRequired
   }
 
   static defaultProps = {

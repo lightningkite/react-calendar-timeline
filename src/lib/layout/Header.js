@@ -6,6 +6,7 @@ class Header extends Component {
   static propTypes = {
     hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,
+    daySelected: PropTypes.func.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
@@ -21,7 +22,8 @@ class Header extends Component {
     registerScroll: PropTypes.func.isRequired,
     leftSidebarHeader: PropTypes.node,
     rightSidebarHeader: PropTypes.node,
-    headerRef: PropTypes.func.isRequired
+    headerRef: PropTypes.func.isRequired,
+    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   }
 
   render() {
@@ -34,6 +36,7 @@ class Header extends Component {
       headerRef,
       hasRightSidebar,
       showPeriod,
+      daySelected,
       canvasTimeStart,
       canvasTimeEnd,
       canvasWidth,
@@ -43,7 +46,8 @@ class Header extends Component {
       subHeaderLabelFormats,
       headerLabelGroupHeight,
       headerLabelHeight,
-      registerScroll
+      registerScroll,
+      groups
     } = this.props
 
     const headerStyle = {
@@ -65,12 +69,14 @@ class Header extends Component {
             data-testid="timeline-elements-header"
             hasRightSidebar={hasRightSidebar}
             showPeriod={showPeriod}
+            daySelected={daySelected}
             canvasTimeStart={canvasTimeStart}
             canvasTimeEnd={canvasTimeEnd}
             canvasWidth={canvasWidth}
             minUnit={minUnit}
             timeSteps={timeSteps}
             width={width}
+            groups={groups}
             headerLabelFormats={headerLabelFormats}
             subHeaderLabelFormats={subHeaderLabelFormats}
             headerLabelGroupHeight={headerLabelGroupHeight}

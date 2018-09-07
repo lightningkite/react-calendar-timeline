@@ -114,8 +114,8 @@ export default class ReactCalendarTimeline extends Component {
     defaultTimeStart: PropTypes.object,
     defaultTimeEnd: PropTypes.object,
 
-    visibleTimeStart: PropTypes.number,
-    visibleTimeEnd: PropTypes.number,
+    visibleTimeStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    visibleTimeEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     onTimeChange: PropTypes.func,
     onBoundsChange: PropTypes.func,
 
@@ -597,14 +597,20 @@ export default class ReactCalendarTimeline extends Component {
     )
   }
 
-  selectItem = (item, clickType, e) => {
+  daySelected = (time) => {
+    if (this.props.daySelected) {
+      this.props.daySelected(time)
+    }
+  }
+
+  selectItem = (item, clickType, e, itemObj) => {
     if (
       this.state.selectedItem === item ||
       (this.props.itemTouchSendsClick && clickType === 'touch')
     ) {
       if (item && this.props.onItemClick) {
         const time = this.timeFromItemEvent(e)
-        this.props.onItemClick(item, e, time)
+        this.props.onItemClick(item, e, time, itemObj)
       }
     } else {
       this.setState({ selectedItem: item })
@@ -692,10 +698,10 @@ export default class ReactCalendarTimeline extends Component {
     })
   }
 
-  dropItem = (item, dragTime, newGroupOrder) => {
+  dropItem = (item, dragTime, newGroupOrder, itemObj) => {
     this.setState({ draggingItem: null, dragTime: null, dragGroupTitle: null })
     if (this.props.onItemMove) {
-      this.props.onItemMove(item, dragTime, newGroupOrder)
+      this.props.onItemMove(item, dragTime, newGroupOrder, itemObj)
     }
   }
 
@@ -707,10 +713,10 @@ export default class ReactCalendarTimeline extends Component {
     })
   }
 
-  resizedItem = (item, resizeTime, edge, timeDelta) => {
+  resizedItem = (item, resizeTime, edge, timeDelta, itemObj) => {
     this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
     if (this.props.onItemResize && timeDelta !== 0) {
-      this.props.onItemResize(item, resizeTime, edge)
+      this.props.onItemResize(item, resizeTime, edge, itemObj)
     }
   }
 
@@ -884,6 +890,7 @@ export default class ReactCalendarTimeline extends Component {
 
     return (
       <Header
+        groups={this.props.groups}
         canvasTimeStart={canvasTimeStart}
         hasRightSidebar={this.props.rightSidebarWidth > 0}
         canvasTimeEnd={canvasTimeEnd}
@@ -896,6 +903,7 @@ export default class ReactCalendarTimeline extends Component {
         stickyOffset={this.props.stickyOffset}
         stickyHeader={this.props.stickyHeader}
         showPeriod={this.showPeriod}
+        daySelected={this.daySelected}
         headerLabelFormats={this.props.headerLabelFormats}
         subHeaderLabelFormats={this.props.subHeaderLabelFormats}
         registerScroll={this.registerScrollListener}

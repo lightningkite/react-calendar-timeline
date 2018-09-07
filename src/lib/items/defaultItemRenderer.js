@@ -8,13 +8,34 @@ export const defaultItemRenderer = ({
   getResizeProps
 }) => {
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
+
+  let itemProps = getItemProps(item.itemProps)
+  if (itemContext.selected) {
+    itemProps.style = {
+      ...itemProps.style,
+      border: `1px solid ${item.color}`,
+      background: 'transparent',
+      color: '#333333',
+      borderRadius: '3px',
+    }
+  } else {
+    itemProps.style = {
+      ...itemProps.style,
+      backgroundColor: item.color,
+      background: item.color,
+      border: `1px solid ${item.color}`,
+      borderRadius: '3px',
+    }
+  }
   return (
-    <div {...getItemProps(item.itemProps)}>
+    <div {...itemProps}>
       {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : ''}
 
       <div
         className="rct-item-content"
-        style={{ maxHeight: `${itemContext.dimensions.height}` }}
+        style={{
+          maxHeight: `${itemContext.dimensions.height}`,
+        }}
       >
         {itemContext.title}
       </div>

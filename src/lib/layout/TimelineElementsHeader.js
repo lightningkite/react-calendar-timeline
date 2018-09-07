@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import moment from 'moment'
+import Style from 'style-it'
 
 import { iterateTimes, getNextUnit } from '../utility/calendar'
 
@@ -8,6 +9,7 @@ export default class TimelineElementsHeader extends Component {
   static propTypes = {
     hasRightSidebar: PropTypes.bool.isRequired,
     showPeriod: PropTypes.func.isRequired,
+    daySelected: PropTypes.func.isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired,
@@ -18,8 +20,9 @@ export default class TimelineElementsHeader extends Component {
     subHeaderLabelFormats: PropTypes.object.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
-    registerScroll: PropTypes.func.isRequired
-  }
+    registerScroll: PropTypes.func.isRequired,
+    groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  };
 
   constructor(props) {
     super(props)
@@ -94,8 +97,10 @@ export default class TimelineElementsHeader extends Component {
   }
 
   handlePeriodClick = (time, unit) => {
-    if (time && unit) {
+    if (time && unit && unit !== 'day') {
       this.props.showPeriod(moment(time - 0), unit)
+    } else if (time && unit && unit === 'day') {
+      this.props.daySelected(moment(time - 0))
     }
   }
 
@@ -106,7 +111,8 @@ export default class TimelineElementsHeader extends Component {
       nextProps.width != this.props.width ||
       nextProps.canvasWidth != this.props.canvasWidth ||
       nextProps.subHeaderLabelFormats != this.props.subHeaderLabelFormats ||
-      nextProps.headerLabelFormats != this.props.headerLabelFormats
+      nextProps.headerLabelFormats != this.props.headerLabelFormats ||
+      nextProps.groups != this.props.groups
 
     return willUpate
   }
@@ -120,7 +126,8 @@ export default class TimelineElementsHeader extends Component {
       timeSteps,
       headerLabelGroupHeight,
       headerLabelHeight,
-      hasRightSidebar
+      hasRightSidebar,
+      groups
     } = this.props
 
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
@@ -150,30 +157,32 @@ export default class TimelineElementsHeader extends Component {
           const contentWidth = Math.min(labelWidth, canvasWidth / 3)
 
           topHeaderLabels.push(
-            <div
-              key={`top-label-${time.valueOf()}`}
-              className={`rct-label-group${
-                hasRightSidebar ? ' rct-has-right-sidebar' : ''
-              }`}
-              onClick={() => this.handlePeriodClick(time, nextUnit)}
-              style={{
-                left: `${left - 1}px`,
-                width: `${labelWidth}px`,
-                height: `${headerLabelGroupHeight}px`,
-                lineHeight: `${headerLabelGroupHeight}px`,
-                cursor: 'pointer'
-              }}
-            >
-              <span style={{ width: contentWidth, display: 'block' }}>
-                {this.headerLabel(time, nextUnit, labelWidth)}
-              </span>
-            </div>
+
+              <div
+                key={`top-label-${time.valueOf()}`}
+                className={`rct-label-group${
+                  hasRightSidebar ? ' rct-has-right-sidebar' : ''
+                }`}
+                onClick={() => this.handlePeriodClick(time, nextUnit)}
+                style={{
+                  left: `${left - 1}px`,
+                  width: `${labelWidth}px`,
+                  height: `${headerLabelGroupHeight}px`,
+                  lineHeight: `${headerLabelGroupHeight}px`,
+                  cursor: 'pointer',
+                }}
+              >
+                <span style={{ width: contentWidth, display: 'block' }}>
+                  {this.headerLabel(time, nextUnit, labelWidth)}
+                </span>
+              </div>
           )
         }
       )
     }
 
     const bottomHeaderLabels = []
+    const todayString = moment().format('YYYY-MM-DD')
     iterateTimes(
       canvasTimeStart,
       canvasTimeEnd,
@@ -188,34 +197,74 @@ export default class TimelineElementsHeader extends Component {
         )
         const leftCorrect = firstOfType ? 1 : 0
 
+        let group = groups.filter(group => group.date === time.format('YYYY-MM-DD'))
+        let color = '#333333'
+        let tooltipColor = '#333333'
+        let fontWeight = 'normal'
+        let title = ''
+        let displayTooltip
+        if (group.length > 0) {
+          group = group[0]
+          color = group.color
+          tooltipColor = group.color
+          title = group.title
+          fontWeight = 'bold'
+          displayTooltip = true
+        } else if (time.format('YYYY-MM-DD') === todayString) {
+          color = '#3D454A'
+          fontWeight = 'bold'
+          if (groups.length === 0) {
+            displayTooltip = true
+            tooltipColor = '#F3D900'
+            title = 'Click a day to add milestones'
+          }
+        }
         bottomHeaderLabels.push(
-          <div
-            key={`label-${time.valueOf()}`}
-            className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
-              firstOfType ? 'rct-first-of-type' : ''
-            } ${minUnit !== 'month' ? `rct-day-${time.day()}` : ''} `}
-            onClick={() => this.handlePeriodClick(time, minUnit)}
-            style={{
-              left: `${left - leftCorrect}px`,
-              width: `${labelWidth}px`,
-              height: `${
-                minUnit === 'year'
-                  ? headerLabelGroupHeight + headerLabelHeight
-                  : headerLabelHeight
-              }px`,
-              lineHeight: `${
-                minUnit === 'year'
-                  ? headerLabelGroupHeight + headerLabelHeight
-                  : headerLabelHeight
-              }px`,
-              fontSize: `${
-                labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
-              }px`,
-              cursor: 'pointer'
-            }}
-          >
-            {this.subHeaderLabel(time, minUnit, labelWidth)}
-          </div>
+          <Style key={`label-style-${time.valueOf()}`}>
+            {`
+              .tooltip::before {
+                  border-color: ${tooltipColor} transparent transparent transparent;
+              }
+              .tooltip::after {
+                  content: '${title}';
+                  background: ${tooltipColor};
+                  width: ${title.length * 8 + 10}px;
+              }
+            `}
+            <div
+              key={`label-${time.valueOf()}`}
+              className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
+                firstOfType ? 'rct-first-of-type' : ''
+              } ${
+                minUnit !== 'month' ? `rct-day-${time.day()}` : ''
+              } ${
+                displayTooltip ? 'tooltip' : ''
+              }`}
+              onClick={() => this.handlePeriodClick(time, minUnit)}
+              style={{
+                left: `${left - leftCorrect}px`,
+                width: `${labelWidth}px`,
+                height: `${
+                  minUnit === 'year'
+                    ? headerLabelGroupHeight + headerLabelHeight
+                    : headerLabelHeight
+                }px`,
+                lineHeight: `${
+                  minUnit === 'year'
+                    ? headerLabelGroupHeight + headerLabelHeight
+                    : headerLabelHeight
+                }px`,
+                fontSize: `${
+                  labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
+                }px`,
+                cursor: 'pointer',
+                color: color,
+                fontWeight: fontWeight
+              }}
+            >
+              {this.subHeaderLabel(time, minUnit, labelWidth)}
+            </div>
+          </Style>
         )
       }
     )

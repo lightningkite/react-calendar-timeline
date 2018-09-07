@@ -33,8 +33,8 @@ export class TimelineStateProvider extends React.Component {
   /* eslint-disable react/no-unused-prop-types */
   static propTypes = {
     children: PropTypes.element.isRequired,
-    visibleTimeStart: PropTypes.number.isRequired,
-    visibleTimeEnd: PropTypes.number.isRequired,
+    visibleTimeStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]).isRequired,
+    visibleTimeEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]).isRequired,
     canvasTimeStart: PropTypes.number.isRequired,
     canvasTimeEnd: PropTypes.number.isRequired,
     canvasWidth: PropTypes.number.isRequired

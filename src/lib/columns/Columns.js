@@ -54,7 +54,7 @@ export default class Columns extends Component {
         const firstOfType = minUnitValue === (minUnit === 'day' ? 1 : 0)
         const lineWidth = firstOfType ? 2 : 1
         const labelWidth =
-          Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth
+          Math.ceil((nextTime.valueOf() - time.valueOf()) * ratio) - lineWidth + 3  // TODO: This magic 3 helps the darker blue background in the timeline not have a gap between the two lines. This is not cool feel free to fix
         const leftPush = firstOfType ? -1 : 0
 
         let classNamesForTime = []
@@ -83,7 +83,7 @@ export default class Columns extends Component {
               top: '0px',
               left: `${left + leftPush}px`,
               width: `${labelWidth}px`,
-              height: `${height}px`
+              height: `${height}px`,
             }}
           />
         )

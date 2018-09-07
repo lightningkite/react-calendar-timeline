@@ -285,7 +285,8 @@ export default class Item extends Component {
             this.props.onDrop(
               this.itemId,
               dragTime,
-              this.props.order + this.dragGroupDelta(e)
+              this.props.order + this.dragGroupDelta(e),
+              this.props.item
             )
           }
 
@@ -366,7 +367,8 @@ export default class Item extends Component {
               this.itemId,
               resizeTime,
               resizeEdge,
-              this.resizeTimeDelta(e, resizeEdge)
+              this.resizeTimeDelta(e, resizeEdge),
+              this.props.item
             )
           }
           this.setState({
@@ -494,7 +496,7 @@ export default class Item extends Component {
 
   actualClick(e, clickType) {
     if (this.props.canSelect && this.props.onSelect) {
-      this.props.onSelect(this.itemId, clickType, e)
+      this.props.onSelect(this.itemId, clickType, e, this.props.item)
     }
   }
 

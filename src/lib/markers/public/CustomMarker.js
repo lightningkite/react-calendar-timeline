@@ -7,7 +7,7 @@ class CustomMarker extends React.Component {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired,
     children: PropTypes.func,
-    date: PropTypes.number.isRequired
+    date: PropTypes.oneOfType([PropTypes.number, PropTypes.object]).isRequired
   }
 
   componentDidMount() {
