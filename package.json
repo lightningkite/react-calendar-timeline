@@ -2,7 +2,7 @@
   "name": "react-calendar-timeline",
   "version": "0.19.0",
   "description": "react calendar timeline",
-  "main": "src/lib/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "npm run build:lib",
     "build:demo": "echo '!!! Building Demo' && cross-env NODE_ENV=production webpack --progress",
@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js --ext .jsx ./src",
     "lint:fix": "prettier-eslint --parser babylon --write \"src/**/*.js\"",
     "prepublish": "npm run build:lib",
+    "prepare": "npm run build:lib",
     "start": "webpack-dev-server --hot --host 0.0.0.0 --display-modules",
     "test": "jest"
   },
