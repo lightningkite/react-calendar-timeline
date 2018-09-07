@@ -80,6 +80,7 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasDoubleClick: PropTypes.func,
     onCanvasContextMenu: PropTypes.func,
     onZoom: PropTypes.func,
+    daySelected: PropTypes.func,
 
     moveResizeValidator: PropTypes.func,
 
