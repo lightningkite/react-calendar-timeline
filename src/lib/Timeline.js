@@ -753,10 +753,14 @@ export default class ReactCalendarTimeline extends Component {
     if (this.props.onCanvasClick == null) return
 
     const time = this.getTimeFromRowClickEvent(e)
-    const groupId = _get(
-      this.props.groups[rowIndex],
-      this.props.keys.groupIdKey
-    )
+    let groupId = null
+    if (rowIndex) {
+      groupId = _get(
+        this.props.groups[rowIndex],
+        this.props.keys.groupIdKey
+      )
+    }
+
     this.props.onCanvasClick(groupId, time, e)
   }
 
@@ -1145,10 +1149,6 @@ export default class ReactCalendarTimeline extends Component {
       height: `${height}px`
     }
 
-    if (items.length === 0 && groups.length > 0) {
-      console.log('lets show the tooltip')
-    }
-
     return (
       <TimelineStateProvider
         visibleTimeStart={visibleTimeStart}
@@ -1215,7 +1215,10 @@ export default class ReactCalendarTimeline extends Component {
                 `}
               </Style>
             }
-            <div style={outerComponentStyle} className={`rct-outer${items.length === 0 && groups.length > 0 ? ' tooltip-timeline' : ''}`}>
+            <div
+              style={outerComponentStyle}
+              className={`rct-outer${items.length === 0 && groups.length > 0 ? ' tooltip-timeline' : ''}`}
+            >
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement
                 scrollRef={el => {

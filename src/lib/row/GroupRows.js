@@ -57,6 +57,14 @@ export default class GroupRows extends Component {
       )
     }
 
-    return <div className="rct-horizontal-lines">{lines}</div>
+    return [
+      <div key="horizontal-lines" className="rct-horizontal-lines">{lines}</div>,
+      <div
+        onClick={evt => onRowClick(evt, null)}
+        key="extra-space"
+        className="rct-extra-space"
+        style={{ height: '100%', width:  canvasWidth }}
+      />
+    ]
   }
 }
