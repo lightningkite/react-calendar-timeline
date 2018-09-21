@@ -10,6 +10,7 @@ import Columns from './columns/Columns'
 import GroupRows from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
 import MarkerCanvas from './markers/MarkerCanvas'
+import Style from 'style-it'
 
 import windowResizeDetector from '../resize-detector/window'
 
@@ -1144,6 +1145,10 @@ export default class ReactCalendarTimeline extends Component {
       height: `${height}px`
     }
 
+    if (items.length === 0 && groups.length > 0) {
+      console.log('lets show the tooltip')
+    }
+
     return (
       <TimelineStateProvider
         visibleTimeStart={visibleTimeStart}
@@ -1167,7 +1172,50 @@ export default class ReactCalendarTimeline extends Component {
               headerLabelGroupHeight,
               headerLabelHeight
             )}
-            <div style={outerComponentStyle} className="rct-outer">
+            {items.length === 0 && groups.length > 0 &&
+              <Style>
+                {`
+                  .tooltip-timeline {
+                      position:relative;
+                      z-index: 100;
+                  }
+                  .tooltip-timeline::before {
+                      content: "";
+                      position: absolute;
+                      top: 100px;
+                      left: 50%;
+                      transform: translateX(-50%);
+                      border-width: 4px 6px 0 6px;
+                      border-style: solid;
+                      border-color: #F3D900 transparent transparent transparent;
+                      z-index: 100;
+                  }
+                  .tooltip-timeline::after {
+                      content: "Click on timeline to add tasks";
+                      text-overflow: ellipsis;
+                      overflow: hidden;
+                      position: absolute;
+                      height: 25px;
+                      line-height: 25px;
+                      left: 50%;
+                      top: 100px;
+                      transform: translateX(-50%) translateY(-100%);
+                      background: #F3D900;
+                      text-align: center;
+                      color: #fff;
+                      padding: 4px 2px 2px 0px;
+                      font-size: 12px;
+                      font-weight: bold;
+                      min-width: 80px;
+                      width: 200px;
+                      border-radius: 5px;
+                      pointer-events: none;
+                      z-index: 100;
+                  }
+                `}
+              </Style>
+            }
+            <div style={outerComponentStyle} className={`rct-outer${items.length === 0 && groups.length > 0 ? ' tooltip-timeline' : ''}`}>
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement
                 scrollRef={el => {
