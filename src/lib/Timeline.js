@@ -1146,7 +1146,22 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     const outerComponentStyle = {
-      height: `${height}px`
+      height: `${height}px`,
+      position: 'relative'
+    }
+
+    const controlStyle = {
+      position: 'absolute',
+      height: '25px',
+      width: '25px',
+      color: '#3D454A',
+      backgroundColor: '#ffffff',
+      border: '1px solid #CBDCE4',
+      zIndex: 200,
+      cursor: 'pointer',
+      borderRadius: '3px',
+      textAlign: 'center',
+      lineHeight: '13px'
     }
 
     return (
@@ -1219,6 +1234,21 @@ export default class ReactCalendarTimeline extends Component {
               style={outerComponentStyle}
               className={`rct-outer${items.length === 0 && groups.length > 0 ? ' tooltip-timeline' : ''}`}
             >
+              {/*<span style={{position: 'absolute', top: 0, left: 0}}>{zoom}</span>*/}
+              <button
+                type='button'
+                style={{...controlStyle, right: '40px', bottom: '10px'}}
+                onClick={e => {
+                  e.preventDefault()
+                  this.handleWheelZoom(10, 562, -10)
+                }}>+</button>
+              <button
+                type='button'
+                style={{...controlStyle, right: '10px', bottom: '10px'}}
+                onClick={e => {
+                  e.preventDefault()
+                  this.handleWheelZoom(10, 562, 10)
+                }}>-</button>
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement
                 scrollRef={el => {
