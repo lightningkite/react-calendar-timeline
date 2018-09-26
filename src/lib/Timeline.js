@@ -1240,15 +1240,15 @@ export default class ReactCalendarTimeline extends Component {
                 style={{...controlStyle, right: '40px', bottom: '10px'}}
                 onClick={e => {
                   e.preventDefault()
-                  this.handleWheelZoom(10, 562, -10)
-                }}>+</button>
+                  this.handleWheelZoom(10, 562, 10)
+                }}>-</button>
               <button
                 type='button'
                 style={{...controlStyle, right: '10px', bottom: '10px'}}
                 onClick={e => {
                   e.preventDefault()
-                  this.handleWheelZoom(10, 562, 10)
-                }}>-</button>
+                  this.handleWheelZoom(10, 562, -10)
+                }}>+</button>
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement
                 scrollRef={el => {
