@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import moment from 'moment'
-import Style from 'style-it'
 
 import { iterateTimes, getNextUnit } from '../utility/calendar'
 
@@ -163,13 +162,12 @@ export default class TimelineElementsHeader extends Component {
                 className={`rct-label-group${
                   hasRightSidebar ? ' rct-has-right-sidebar' : ''
                 }`}
-                onClick={() => this.handlePeriodClick(time, nextUnit)}
                 style={{
                   left: `${left - 1}px`,
                   width: `${labelWidth}px`,
                   height: `${headerLabelGroupHeight}px`,
                   lineHeight: `${headerLabelGroupHeight}px`,
-                  cursor: 'pointer',
+                  pointerEvents: 'none',
                 }}
               >
                 <span style={{ width: contentWidth, display: 'block' }}>
@@ -182,7 +180,7 @@ export default class TimelineElementsHeader extends Component {
     }
 
     const bottomHeaderLabels = []
-    const todayString = moment().format('YYYY-MM-DD')
+    const tomorrowString = moment().add(1, 'days').format('YYYY-MM-DD')
     iterateTimes(
       canvasTimeStart,
       canvasTimeEnd,
@@ -210,7 +208,7 @@ export default class TimelineElementsHeader extends Component {
           title = group.title
           fontWeight = 'bold'
           displayTooltip = true
-        } else if (time.format('YYYY-MM-DD') === todayString) {
+        } else if (time.format('YYYY-MM-DD') === tomorrowString) {
           color = '#3D454A'
           fontWeight = 'bold'
           if (groups.length === 0) {
@@ -220,51 +218,54 @@ export default class TimelineElementsHeader extends Component {
           }
         }
         bottomHeaderLabels.push(
-          <Style key={`label-style-${time.valueOf()}`}>
-            {`
-              .tooltip::before {
-                  border-color: ${tooltipColor} transparent transparent transparent;
-              }
-              .tooltip::after {
-                  content: '${title}';
-                  background: ${tooltipColor};
-                  width: ${title.length * 8 + 10}px;
-              }
-            `}
-            <div
-              key={`label-${time.valueOf()}`}
-              className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
-                firstOfType ? 'rct-first-of-type' : ''
-              } ${
-                minUnit !== 'month' ? `rct-day-${time.day()}` : ''
-              } ${
-                displayTooltip ? 'tooltip' : ''
-              }`}
-              onClick={() => this.handlePeriodClick(time, minUnit)}
-              style={{
-                left: `${left - leftCorrect}px`,
-                width: `${labelWidth}px`,
-                height: `${
-                  minUnit === 'year'
-                    ? headerLabelGroupHeight + headerLabelHeight
-                    : headerLabelHeight
-                }px`,
-                lineHeight: `${
-                  minUnit === 'year'
-                    ? headerLabelGroupHeight + headerLabelHeight
-                    : headerLabelHeight
-                }px`,
-                fontSize: `${
-                  labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
-                }px`,
-                cursor: 'pointer',
-                color: color,
-                fontWeight: fontWeight
-              }}
-            >
-              {this.subHeaderLabel(time, minUnit, labelWidth)}
-            </div>
-          </Style>
+          <div
+            key={`label-${time.valueOf()}`}
+            className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
+              firstOfType ? 'rct-first-of-type' : ''
+            } ${
+              minUnit !== 'month' ? `rct-day-${time.day()}` : ''
+            }`}
+            onClick={() => this.handlePeriodClick(time, minUnit)}
+            style={{
+              left: `${left - leftCorrect}px`,
+              width: `${labelWidth}px`,
+              height: `${
+                minUnit === 'year'
+                  ? headerLabelGroupHeight + headerLabelHeight
+                  : headerLabelHeight
+              }px`,
+              lineHeight: `${
+                minUnit === 'year'
+                  ? headerLabelGroupHeight + headerLabelHeight
+                  : headerLabelHeight
+              }px`,
+              fontSize: `${
+                labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
+              }px`,
+              cursor: 'pointer',
+              color: color,
+              fontWeight: fontWeight
+            }}
+          >
+            {displayTooltip &&
+              <div
+                style={{fontWeight: 'bold', backgroundColor: tooltipColor, width: `${title.length * 8 + 10}px`}}
+                className='tooltip'
+                onClick={() => {
+                  this.handlePeriodClick(time, minUnit)
+                }
+              }>
+                {title}
+              </div>
+            }
+            {displayTooltip &&
+              <div
+                style={{borderColor: `${tooltipColor} transparent transparent transparent`}}
+                className='tooltip-arrow'
+                onClick={() => this.handlePeriodClick(time, minUnit)}></div>
+            }
+            {this.subHeaderLabel(time, minUnit, labelWidth)}
+          </div>
         )
       }
     )
