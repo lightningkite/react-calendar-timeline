@@ -201,7 +201,7 @@ export default class TimelineElementsHeader extends Component {
         let fontWeight = 'normal'
         let title = ''
         let displayTooltip
-        if (group.length > 0) {
+        if (group.length > 0 && minUnit === 'day') {
           group = group[0]
           color = group.color
           tooltipColor = group.color
