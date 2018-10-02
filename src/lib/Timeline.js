@@ -1237,6 +1237,16 @@ export default class ReactCalendarTimeline extends Component {
               {/*<span style={{position: 'absolute', top: 0, left: 0}}>{zoom}</span>*/}
               <button
                 type='button'
+                style={{...controlStyle, width: '60px', right: '70px', bottom: '10px', fontSize: '12px'}}
+                onClick={() => {
+                  this.props.onTimeChange(
+                    moment().subtract(15, 'days').valueOf(),
+                    moment().add(15, 'days').valueOf(),
+                    this.updateScrollCanvas
+                  )
+                }}>Today</button>
+              <button
+                type='button'
                 style={{...controlStyle, right: '40px', bottom: '10px'}}
                 onClick={e => {
                   e.preventDefault()
