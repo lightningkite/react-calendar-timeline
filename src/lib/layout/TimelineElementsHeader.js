@@ -19,13 +19,18 @@ export default class TimelineElementsHeader extends Component {
     subHeaderLabelFormats: PropTypes.object.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
+    registerScroll: PropTypes.func.isRequired,
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-    scrollHeaderRef: PropTypes.func.isRequired
-  }
+  };
 
   constructor(props) {
     super(props)
 
+    props.registerScroll(scrollX => {
+      if (scrollX != null) {
+        this.headerEl.scrollLeft = scrollX
+      }
+    })
     this.state = {
       touchTarget: null,
       touchActive: false
@@ -107,7 +112,6 @@ export default class TimelineElementsHeader extends Component {
       nextProps.subHeaderLabelFormats != this.props.subHeaderLabelFormats ||
       nextProps.headerLabelFormats != this.props.headerLabelFormats ||
       nextProps.groups != this.props.groups
-      nextProps.hasRightSidebar != this.props.hasRightSidebar
 
     return willUpate
   }
@@ -149,7 +153,7 @@ export default class TimelineElementsHeader extends Component {
           // it simulates stickyness where the content is fixed in the center
           // of the label.  when the labelWidth is less than visible time range,
           // have label content fill the entire width
-          const contentWidth = Math.min(labelWidth, canvasWidth)
+          const contentWidth = Math.min(labelWidth, canvasWidth / 3)
 
           topHeaderLabels.push(
 
@@ -279,7 +283,7 @@ export default class TimelineElementsHeader extends Component {
         onTouchStart={this.touchStart}
         onTouchEnd={this.touchEnd}
         style={headerStyle}
-        ref={this.props.scrollHeaderRef}
+        ref={el => (this.headerEl = el)}
       >
         <div
           className="top-header"
@@ -289,7 +293,7 @@ export default class TimelineElementsHeader extends Component {
         </div>
         <div
           className="bottom-header"
-          style={{ height: headerLabelHeight, width: canvasWidth }}
+          style={{ height: twoHeaders ? headerLabelHeight : headerLabelHeight + headerLabelGroupHeight, width: canvasWidth }}
         >
           {bottomHeaderLabels}
         </div>

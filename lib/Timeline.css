@@ -31,8 +31,7 @@
 
 .react-calendar-timeline .rct-header-container {
   z-index: 90;
-  display: flex;
-  overflow: hidden; }
+  display: flex; }
   .react-calendar-timeline .rct-header-container.header-sticky {
     position: sticky;
     position: -webkit-sticky; }

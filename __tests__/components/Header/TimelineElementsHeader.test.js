@@ -16,7 +16,7 @@ const defaultProps = {
   subHeaderLabelFormats: {},
   headerLabelGroupHeight: 0,
   headerLabelHeight: 0,
-  scrollHeaderRef: () => {}
+  registerScroll: () => {}
 }
 
 describe('Header', () => {
@@ -37,20 +37,42 @@ describe('Header', () => {
     expect(mouseDownMock).not.toHaveBeenCalled()
   })
 
-  it('accepts scrollHeaderRef callback', () => {
-    const scrollHeaderRef = jest.fn()
+  describe('scroll sync', () => {
+    it('call to registerScroll listener updates scrollLeft of root element', () => {
+      const registerScrollMock = jest.fn()
+      const props = {
+        ...defaultProps,
+        registerScroll: registerScrollMock
+      }
 
-    const props = {
-      ...defaultProps,
-      scrollHeaderRef: scrollHeaderRef
-    }
+      const wrapper = mount(<TimelineElementsHeader {...props} />)
 
-    mount(<TimelineElementsHeader {...props} />)
+      expect(wrapper.getDOMNode().scrollLeft).toBe(0)
 
-    expect(scrollHeaderRef).toHaveBeenCalledTimes(1)
+      const scrollListener = registerScrollMock.mock.calls[0][0]
 
-    const mockCallParam = scrollHeaderRef.mock.calls[0][0]
+      const scrollX = 100
 
-    expect(mockCallParam.dataset.testid).toBe('header')
+      scrollListener(scrollX)
+
+      expect(wrapper.getDOMNode().scrollLeft).toBe(scrollX)
+    })
+    it('scrollLeft is not set if scrollX is null', () => {
+      const registerScrollMock = jest.fn()
+      const props = {
+        ...defaultProps,
+        registerScroll: registerScrollMock
+      }
+
+      const wrapper = mount(<TimelineElementsHeader {...props} />)
+
+      expect(wrapper.getDOMNode().scrollLeft).toBe(0)
+
+      const scrollListener = registerScrollMock.mock.calls[0][0]
+
+      scrollListener(undefined)
+
+      expect(wrapper.getDOMNode().scrollLeft).toBe(0)
+    })
   })
 })
