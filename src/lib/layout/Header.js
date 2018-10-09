@@ -19,21 +19,22 @@ class Header extends Component {
     stickyHeader: PropTypes.bool.isRequired,
     headerLabelGroupHeight: PropTypes.number.isRequired,
     headerLabelHeight: PropTypes.number.isRequired,
-    registerScroll: PropTypes.func.isRequired,
     leftSidebarHeader: PropTypes.node,
     rightSidebarHeader: PropTypes.node,
-    headerRef: PropTypes.func.isRequired,
     groups: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    leftSidebarWidth: PropTypes.number,
+    rightSidebarWidth: PropTypes.number,
+    headerRef: PropTypes.func.isRequired,
+    scrollHeaderRef: PropTypes.func.isRequired
   }
 
   render() {
     const {
-      leftSidebarHeader,
-      rightSidebarHeader,
       width,
       stickyOffset,
       stickyHeader,
       headerRef,
+      scrollHeaderRef,
       hasRightSidebar,
       showPeriod,
       daySelected,
@@ -46,8 +47,11 @@ class Header extends Component {
       subHeaderLabelFormats,
       headerLabelGroupHeight,
       headerLabelHeight,
-      registerScroll,
-      groups
+      groups,
+      leftSidebarHeader,
+      rightSidebarHeader,
+      leftSidebarWidth,
+      rightSidebarWidth
     } = this.props
 
     const headerStyle = {
@@ -56,6 +60,24 @@ class Header extends Component {
 
     const headerClass = stickyHeader ? 'header-sticky' : ''
 
+    const leftSidebar = leftSidebarHeader && leftSidebarWidth > 0 && (
+      <div
+        className="rct-sidebar-header"
+        style={{ width: leftSidebarWidth }}
+      >
+        {leftSidebarHeader}
+      </div>
+    )
+
+    const rightSidebar = rightSidebarHeader && rightSidebarWidth > 0 && (
+      <div
+        className="rct-sidebar-header rct-sidebar-right"
+        style={{ width: rightSidebarWidth }}
+      >
+        {rightSidebarHeader}
+      </div>
+    )
+
     return (
       <div
         className={`rct-header-container ${headerClass}`}
@@ -63,7 +85,7 @@ class Header extends Component {
         ref={headerRef}
         style={headerStyle}
       >
-        {leftSidebarHeader}
+        {leftSidebar}
         <div style={{ width }} data-testid="timeline-elements-header-container">
           <TimelineElementsHeader
             data-testid="timeline-elements-header"
@@ -81,10 +103,11 @@ class Header extends Component {
             subHeaderLabelFormats={subHeaderLabelFormats}
             headerLabelGroupHeight={headerLabelGroupHeight}
             headerLabelHeight={headerLabelHeight}
-            registerScroll={registerScroll}
+            scrollHeaderRef={scrollHeaderRef}
+
           />
         </div>
-        {rightSidebarHeader}
+        {rightSidebar}
       </div>
     )
   }
