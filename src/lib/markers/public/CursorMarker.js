@@ -10,11 +10,10 @@ class CursorMarker extends React.Component {
   }
 
   componentDidMount() {
-    const { unsubscribe } = this.props.subscribeMarker({
+    this.unsubscribe = this.props.subscribeMarker({
       type: TimelineMarkerType.Cursor,
       renderer: this.props.children
     })
-    this.unsubscribe = unsubscribe
   }
 
   componentWillUnmount() {

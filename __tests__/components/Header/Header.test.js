@@ -22,7 +22,7 @@ const defaultProps = {
   stickyHeader: true,
   headerLabelGroupHeight: 15,
   headerLabelHeight: 15,
-  scrollHeaderRef: () => {},
+  registerScroll: () => {},
   headerRef: () => {}
 }
 
@@ -33,23 +33,6 @@ const selectors = {
 
 describe('Header', () => {
   describe('timeline-elements-header', () => {
-    it('accepts scrollHeaderRef callback', () => {
-      const scrollHeaderRef = jest.fn()
-
-      const props = {
-        ...defaultProps,
-        scrollHeaderRef: scrollHeaderRef
-      }
-
-      mount(<Header {...props} />)
-
-      expect(scrollHeaderRef).toHaveBeenCalledTimes(1)
-
-      const mockCallParam = scrollHeaderRef.mock.calls[0][0]
-
-      expect(mockCallParam.dataset.testid).toBe('header')
-    })
-
     it('accepts headerRef callback', () => {
       const headerRefMock = jest.fn()
 

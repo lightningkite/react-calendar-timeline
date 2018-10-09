@@ -6,7 +6,6 @@ import { TimelineMarkerType } from '../markerType'
 class TodayMarker extends React.Component {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired,
-    updateMarker: PropTypes.func.isRequired,
     interval: PropTypes.number,
     children: PropTypes.func
   }
@@ -16,29 +15,17 @@ class TodayMarker extends React.Component {
   }
 
   componentDidMount() {
-     const { unsubscribe, getMarker } = this.props.subscribeMarker({
+    this.unsubscribe = this.props.subscribeMarker({
       type: TimelineMarkerType.Today,
       renderer: this.props.children,
       interval: this.props.interval
     })
-    this.unsubscribe = unsubscribe
-    this.getMarker = getMarker
   }
 
   componentWillUnmount() {
     if (this.unsubscribe != null) {
       this.unsubscribe()
       this.unsubscribe = null
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.interval !== this.props.interval && this.getMarker) {
-      const marker = this.getMarker()
-      this.props.updateMarker({
-        ...marker,
-        interval: this.props.interval,
-      })
     }
   }
 
@@ -51,8 +38,8 @@ class TodayMarker extends React.Component {
 const TodayMarkerWrapper = props => {
   return (
     <TimelineMarkersConsumer>
-      {({ subscribeMarker, updateMarker }) => (
-        <TodayMarker subscribeMarker={subscribeMarker} updateMarker={updateMarker} {...props} />
+      {({ subscribeMarker }) => (
+        <TodayMarker subscribeMarker={subscribeMarker} {...props} />
       )}
     </TimelineMarkersConsumer>
   )
