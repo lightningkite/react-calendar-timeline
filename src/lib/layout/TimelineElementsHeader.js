@@ -181,6 +181,7 @@ export default class TimelineElementsHeader extends Component {
 
     const bottomHeaderLabels = []
     const tomorrowString = moment().add(1, 'days').format('YYYY-MM-DD')
+    const todayString = moment().format('YYYY-MM-DD')
     iterateTimes(
       canvasTimeStart,
       canvasTimeEnd,
@@ -210,12 +211,13 @@ export default class TimelineElementsHeader extends Component {
           displayTooltip = true
         } else if (time.format('YYYY-MM-DD') === tomorrowString) {
           color = '#3D454A'
-          fontWeight = 'bold'
           if (groups.length === 0) {
             displayTooltip = true
             tooltipColor = '#F3D900'
             title = 'Click a day to add milestones'
           }
+        } else if (time.format('YYYY-MM-DD') === todayString) {
+          fontWeight = 'bold'
         }
         bottomHeaderLabels.push(
           <div
