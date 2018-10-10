@@ -969,12 +969,13 @@ export default class ReactCalendarTimeline extends Component {
 
   stackItems(
     items,
-    groups,
+    allGroups,
     canvasTimeStart,
     visibleTimeStart,
     visibleTimeEnd,
     width
   ) {
+    const groups = allGroups.slice(0, 1)
     // if there are no groups return an empty array of dimensions
     if (groups.length === 0) {
       return {
