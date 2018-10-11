@@ -916,9 +916,6 @@ export default class ReactCalendarTimeline extends Component {
         leftSidebarHeader={leftSidebar}
         rightSidebarHeader={rightSidebar}
         headerRef={this.props.headerRef}
-        updateScrollCanvas={this.updateScrollCanvas}
-        onTimeChange={this.props.onTimeChange}
-        handleWheelZoom={this.handleWheelZoom}
       />
     )
   }
@@ -1154,6 +1151,21 @@ export default class ReactCalendarTimeline extends Component {
       position: 'relative'
     }
 
+    const controlStyle = {
+      position: 'absolute',
+      bottom: '10px',
+      height: '25px',
+      width: '25px',
+      color: '#3D454A',
+      backgroundColor: '#ffffff',
+      border: '1px solid #CBDCE4',
+      zIndex: 200,
+      cursor: 'pointer',
+      borderRadius: '3px',
+      textAlign: 'center',
+      lineHeight: '13px'
+    }
+
     return (
       <TimelineStateProvider
         visibleTimeStart={visibleTimeStart}
@@ -1224,6 +1236,30 @@ export default class ReactCalendarTimeline extends Component {
               style={outerComponentStyle}
               className={`rct-outer${items.length === 0 && groups.length > 0 ? ' tooltip-timeline' : ''}`}
             >
+              <button 
+                type='button' 
+                style={{...controlStyle, width: '60px', right: '70px', fontSize: '12px'}} 
+                onClick={() => {  
+                  this.props.onTimeChange(  
+                    moment().subtract(15, 'days').valueOf(),  
+                    moment().add(15, 'days').valueOf(), 
+                    this.updateScrollCanvas 
+                  ) 
+                }}>Today</button> 
+              <button 
+                type='button' 
+                style={{...controlStyle, right: '40px'}}  
+                onClick={e => { 
+                  e.preventDefault()  
+                  this.handleWheelZoom(10, 562, 10) 
+                }}>-</button> 
+              <button 
+                type='button' 
+                style={{...controlStyle, right: '10px'}}  
+                onClick={e => { 
+                  e.preventDefault()  
+                  this.handleWheelZoom(10, 562, -10)  
+                }}>+</button>
               {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}
               <ScrollElement
                 scrollRef={el => {
