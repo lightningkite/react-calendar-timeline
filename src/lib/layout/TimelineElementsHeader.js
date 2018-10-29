@@ -261,6 +261,11 @@ export default class TimelineElementsHeader extends Component {
               <div
                 style={{fontWeight: 'bold', backgroundColor: tooltipColor, width: `${title.length * 8 + 10}px`}}
                 className='tooltip'
+                onMouseOver={() => {
+                  this.setState({
+                    dayHovered: time.format('YYYY-MM-DD')
+                  })
+                }}
                 onClick={() => {
                   this.handlePeriodClick(time, minUnit)
                 }
