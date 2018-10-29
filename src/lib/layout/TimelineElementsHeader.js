@@ -103,17 +103,18 @@ export default class TimelineElementsHeader extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    const willUpate =
+  shouldComponentUpdate(nextProps, nextState) {
+    const willUpdate =
       nextProps.canvasTimeStart != this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd != this.props.canvasTimeEnd ||
       nextProps.width != this.props.width ||
       nextProps.canvasWidth != this.props.canvasWidth ||
       nextProps.subHeaderLabelFormats != this.props.subHeaderLabelFormats ||
       nextProps.headerLabelFormats != this.props.headerLabelFormats ||
-      nextProps.groups != this.props.groups
+      nextProps.groups != this.props.groups ||
+      nextState.dayHovered != this.state.dayHovered
 
-    return willUpate
+    return willUpdate
   }
 
   render() {
@@ -226,8 +227,15 @@ export default class TimelineElementsHeader extends Component {
               firstOfType ? 'rct-first-of-type' : ''
             } ${
               minUnit !== 'month' ? `rct-day-${time.day()}` : ''
+            } ${
+              this.state.dayHovered === time.format('YYYY-MM-DD') && displayTooltip ? `tooltip-hover` : ''
             }`}
             onClick={() => this.handlePeriodClick(time, minUnit)}
+            onMouseOver={() => {
+              this.setState({
+                dayHovered: time.format('YYYY-MM-DD')
+              })
+            }}
             style={{
               left: `${left - leftCorrect}px`,
               width: `${labelWidth}px`,

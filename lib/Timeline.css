@@ -65,7 +65,6 @@
   .react-calendar-timeline .rct-header .rct-label {
     position: absolute;
     text-align: center;
-    cursor: pointer;
     border-left: 1px solid #bbb;
     color: #333333;
     background: #f0f0f0;
