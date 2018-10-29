@@ -202,6 +202,7 @@ export default class TimelineElementsHeader extends Component {
         let fontWeight = 'normal'
         let title = ''
         let displayTooltip
+        let width
         if (group.length > 0 && minUnit === 'day') {
           group = group[0]
           color = group.color
@@ -215,6 +216,7 @@ export default class TimelineElementsHeader extends Component {
             displayTooltip = true
             tooltipColor = '#F3D900'
             title = 'Click a day to add milestones'
+            width = `${title.length * 8 + 10}px`
           }
         } else if (time.format('YYYY-MM-DD') === todayString) {
           fontWeight = 'bold'
@@ -251,7 +253,7 @@ export default class TimelineElementsHeader extends Component {
           >
             {displayTooltip &&
               <div
-                style={{fontWeight: 'bold', backgroundColor: tooltipColor}}
+                style={{fontWeight: 'bold', backgroundColor: tooltipColor, width: width}}
                 className='tooltip'
                 onClick={() => {
                   this.handlePeriodClick(time, minUnit)
