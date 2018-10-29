@@ -103,7 +103,7 @@ export default class TimelineElementsHeader extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const willUpdate =
       nextProps.canvasTimeStart != this.props.canvasTimeStart ||
       nextProps.canvasTimeEnd != this.props.canvasTimeEnd ||
@@ -111,8 +111,7 @@ export default class TimelineElementsHeader extends Component {
       nextProps.canvasWidth != this.props.canvasWidth ||
       nextProps.subHeaderLabelFormats != this.props.subHeaderLabelFormats ||
       nextProps.headerLabelFormats != this.props.headerLabelFormats ||
-      nextProps.groups != this.props.groups ||
-      nextState.dayHovered != this.state.dayHovered
+      nextProps.groups != this.props.groups
 
     return willUpdate
   }
@@ -227,17 +226,8 @@ export default class TimelineElementsHeader extends Component {
               firstOfType ? 'rct-first-of-type' : ''
             } ${
               minUnit !== 'month' ? `rct-day-${time.day()}` : ''
-            } ${
-              this.state.dayHovered === time.format('YYYY-MM-DD') && displayTooltip ? `tooltip-hover` : ''
             }`}
             onClick={() => this.handlePeriodClick(time, minUnit)}
-            onMouseOver={() => {
-              if (displayTooltip) {
-                this.setState({
-                  dayHovered: time.format('YYYY-MM-DD')
-                })
-              }
-            }}
             style={{
               left: `${left - leftCorrect}px`,
               width: `${labelWidth}px`,
@@ -261,15 +251,8 @@ export default class TimelineElementsHeader extends Component {
           >
             {displayTooltip &&
               <div
-                style={{fontWeight: 'bold', backgroundColor: tooltipColor, width: `${title.length * 8 + 10}px`}}
+                style={{fontWeight: 'bold', backgroundColor: tooltipColor}}
                 className='tooltip'
-                onMouseOver={() => {
-                  if (displayTooltip) {
-                    this.setState({
-                      dayHovered: time.format('YYYY-MM-DD')
-                    })
-                  }
-                }}
                 onClick={() => {
                   this.handlePeriodClick(time, minUnit)
                 }
