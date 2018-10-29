@@ -232,9 +232,11 @@ export default class TimelineElementsHeader extends Component {
             }`}
             onClick={() => this.handlePeriodClick(time, minUnit)}
             onMouseOver={() => {
-              this.setState({
-                dayHovered: time.format('YYYY-MM-DD')
-              })
+              if (displayTooltip) {
+                this.setState({
+                  dayHovered: time.format('YYYY-MM-DD')
+                })
+              }
             }}
             style={{
               left: `${left - leftCorrect}px`,
@@ -262,9 +264,11 @@ export default class TimelineElementsHeader extends Component {
                 style={{fontWeight: 'bold', backgroundColor: tooltipColor, width: `${title.length * 8 + 10}px`}}
                 className='tooltip'
                 onMouseOver={() => {
-                  this.setState({
-                    dayHovered: time.format('YYYY-MM-DD')
-                  })
+                  if (displayTooltip) {
+                    this.setState({
+                      dayHovered: time.format('YYYY-MM-DD')
+                    })
+                  }
                 }}
                 onClick={() => {
                   this.handlePeriodClick(time, minUnit)
