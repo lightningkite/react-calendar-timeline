@@ -508,7 +508,8 @@ export default class Item extends Component {
     //TODO: maybe shouldnt include all of these classes
     const classNames =
       'rct-item' +
-      (this.props.item.className ? ` ${this.props.item.className}` : '')
+      (this.props.item.className ? ` ${this.props.item.className}` : '') +
+      (this.props.selected ? ' rct-item-selected' : '')
 
     return {
       key: this.itemId,
@@ -546,6 +547,7 @@ export default class Item extends Component {
       left: `${dimensions.left}px`,
       top: `${dimensions.top}px`,
       width: `${dimensions.width}px`,
+      minWidth: `${dimensions.width}px`,
       height: `${dimensions.height}px`,
       lineHeight: `${dimensions.height}px`
     }
