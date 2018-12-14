@@ -753,14 +753,10 @@ export default class ReactCalendarTimeline extends Component {
     if (this.props.onCanvasClick == null) return
 
     const time = this.getTimeFromRowClickEvent(e)
-    let groupId = null
-    if (rowIndex) {
-      groupId = _get(
-        this.props.groups[rowIndex],
-        this.props.keys.groupIdKey
-      )
-    }
-
+    const groupId = _get(
+      this.props.groups[rowIndex],
+      this.props.keys.groupIdKey
+    )
     this.props.onCanvasClick(groupId, time, e)
   }
 
