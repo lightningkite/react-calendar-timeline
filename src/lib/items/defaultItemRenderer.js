@@ -32,7 +32,7 @@ export const defaultItemRenderer = ({
       {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : ''}
 
       <div
-        className="rct-item-content"
+        className={`rct-item-content ${item.private ? 'rct-item-private' : ''}`}
         style={{
           maxHeight: `${itemContext.dimensions.height}`,
         }}

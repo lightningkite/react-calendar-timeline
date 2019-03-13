@@ -203,8 +203,10 @@ export default class TimelineElementsHeader extends Component {
         let title = ''
         let displayTooltip
         let width
+        let privateGroup
         if (group.length > 0 && minUnit === 'day') {
           group = group[0]
+          privateGroup = group.private
           color = group.color
           tooltipColor = group.color
           title = group.title
@@ -254,7 +256,7 @@ export default class TimelineElementsHeader extends Component {
             {displayTooltip &&
               <div
                 style={{fontWeight: 'bold', backgroundColor: tooltipColor, width: width}}
-                className='tooltip'
+                className={`tooltip ${privateGroup ? 'tooltip-private' : ''}`}
                 onClick={() => {
                   this.handlePeriodClick(time, minUnit)
                 }
