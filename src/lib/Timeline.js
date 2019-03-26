@@ -850,9 +850,7 @@ export default class ReactCalendarTimeline extends Component {
     let label = null
 
     if (this.state.dragTime) {
-      label = `${moment(this.state.dragTime).format('LLL')}, ${
-        this.state.dragGroupTitle
-      }`
+      label = moment(this.state.dragTime).format('LLL')
     } else if (this.state.resizeTime) {
       label = moment(this.state.resizeTime).format('LLL')
     }

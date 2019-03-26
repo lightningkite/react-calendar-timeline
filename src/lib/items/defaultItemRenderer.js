@@ -37,7 +37,10 @@ export const defaultItemRenderer = ({
           maxHeight: `${itemContext.dimensions.height}`,
         }}
       >
-        {itemContext.title}
+        {item.image}
+        <span>
+          {itemContext.title}
+        </span>
       </div>
 
       {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : ''}

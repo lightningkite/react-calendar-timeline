@@ -197,6 +197,9 @@ export default class TimelineElementsHeader extends Component {
         const leftCorrect = firstOfType ? 1 : 0
 
         let group = groups.filter(group => group.date === time.format('YYYY-MM-DD'))
+        if (group.image) {
+          debugger
+        }
         let color = '#333333'
         let tooltipColor = '#333333'
         let fontWeight = 'normal'
@@ -261,6 +264,7 @@ export default class TimelineElementsHeader extends Component {
                   this.handlePeriodClick(time, minUnit)
                 }
               }>
+                {group.image}
                 {title}
               </div>
             }
